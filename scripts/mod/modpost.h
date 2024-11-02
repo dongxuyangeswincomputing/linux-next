@@ -13,7 +13,8 @@
 #include <elf.h>
 #include "../../include/linux/module_symbol.h"
 
-#include <list_types.h>
+// #include <list_types.h>
+#include <list.h>
 #include "elfconfig.h"
 
 /* On BSD-alike OSes elf.h defines these according to host's word size */

@@ -4,6 +4,8 @@
  */
 
 /dts-v1/;
+#include <dt-bindings/reset/eswin,eic7700-reset.h>
+#include <dt-bindings/clock/eswin,eic7700-clock.h>
 
 / {
 	#address-cells = <2>;
@@ -34,7 +36,7 @@
 			riscv,isa-extensions = "i", "m", "a", "f", "d", "c", "h", "sscofpmf",
 					       "zba", "zbb", "zicsr", "zifencei";
 			tlb-split;
-
+			clocks = <&d0_clock EIC7700_CLK_CPU_EXT_SRC_CORE_CLK_0>;
 			cpu0_intc: interrupt-controller {
 				compatible = "riscv,cpu-intc";
 				#interrupt-cells = <1>;
@@ -62,7 +64,7 @@
 			riscv,isa-extensions = "i", "m", "a", "f", "d", "c", "h", "sscofpmf",
 					       "zba", "zbb", "zicsr", "zifencei";
 			tlb-split;
-
+			clocks = <&d0_clock EIC7700_CLK_CPU_EXT_SRC_CORE_CLK_1>;
 			cpu1_intc: interrupt-controller {
 				compatible = "riscv,cpu-intc";
 				#interrupt-cells = <1>;
@@ -90,7 +92,7 @@
 			riscv,isa-extensions = "i", "m", "a", "f", "d", "c", "h", "sscofpmf",
 					       "zba", "zbb", "zicsr", "zifencei";
 			tlb-split;
-
+			clocks = <&d0_clock EIC7700_CLK_CPU_EXT_SRC_CORE_CLK_2>;
 			cpu2_intc: interrupt-controller {
 				compatible = "riscv,cpu-intc";
 				#interrupt-cells = <1>;
@@ -118,7 +120,7 @@
 			riscv,isa-extensions = "i", "m", "a", "f", "d", "c", "h", "sscofpmf",
 					       "zba", "zbb", "zicsr", "zifencei";
 			tlb-split;
-
+			clocks = <&d0_clock EIC7700_CLK_CPU_EXT_SRC_CORE_CLK_3>;
 			cpu3_intc: interrupt-controller {
 				compatible = "riscv,cpu-intc";
 				#interrupt-cells = <1>;
@@ -235,11 +237,11 @@
 			compatible = "eswin,eic7700-plic", "sifive,plic-1.0.0";
 			reg = <0x0 0xc000000 0x0 0x4000000>;
 			interrupt-controller;
-			interrupts-extended =
-				<&cpu0_intc 11>, <&cpu0_intc 9>,
-				<&cpu1_intc 11>, <&cpu1_intc 9>,
-				<&cpu2_intc 11>, <&cpu2_intc 9>,
-				<&cpu3_intc 11>, <&cpu3_intc 9>;
+			interrupts-extended = <
+				&cpu0_intc 0xffffffff &cpu0_intc 9
+				&cpu1_intc 0xffffffff &cpu1_intc 9
+				&cpu2_intc 0xffffffff &cpu2_intc 9
+				&cpu3_intc 0xffffffff &cpu3_intc 9>;
 			riscv,ndev = <520>;
 			#address-cells = <0>;
 			#interrupt-cells = <1>;
@@ -293,6 +295,173 @@
 			reg-io-width = <4>;
 			reg-shift = <2>;
 			status = "disabled";
+		};
+
+		d0_sys_con: scu_sys_con@0x51810000 {
+			compatible = "eswin,eic7700-scu-sys-con", "syscon", "simple-mfd";
+			#syscon-cells = <2>;
+			#size-cells = <2>;
+			reg = <0x0 0x51810000 0x0 0x8000>;
+			numa-node-id = <0>;
+			d0_noc_wdt:noc@51810324 {
+				compatible = "eswin,eic7700-noc-wdt";
+				interrupt-parent = <&plic>;
+				interrupts = <392>, <393>, <394>, <395>,
+						<396>, <397>, <398>, <399>, <400>,
+						<401>, <402>, <403>, <404>, <405>,
+						<406>, <407>, <408>, <409>, <410>,
+						<411>, <412>, <413>, <414>, <415>,
+						<416>, <417>, <418>, <419>, <420>,
+						<421>, <422>, <423>, <424>, <425>,
+						<426>;
+				eswin,syscrg_csr = <&d0_sys_crg 0x100 0xffff>; //timeout paramerter
+				status = "disabled";
+			};
+		};
+
+		d0_sys_crg: sys-crg@51828000 {
+			compatible = "syscon", "simple-mfd";
+			reg = <0x000000 0x51828000 0x000000 0x80000>;
+			numa-node-id = <0>;
+			d0_reset: reset-controller {
+				compatible = "eswin,eic7700-reset";
+				#reset-cells = <2>;
+			};
+			d0_clock: clock-controller {
+				compatible = "eswin,eic7700-clock";
+				#clock-cells = <1>;
+			};
+		};
+
+		d0_i2c0: i2c@50950000 {
+			compatible = "snps,designware-i2c";
+			clock-frequency = <100000>;
+			clocks = <&d0_clock EIC7700_CLK_LSP_I2C0_PCLK>;
+			clock-names = "pclk";
+			resets = <&d0_reset I2C_RST_CTRL SW_I2C_RST_N_0>;
+			reset-names = "rst";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <0x0 0x50950000 0x0 0x8000>;
+			interrupts = <105>;
+			interrupt-parent = <&plic>;
+		};
+		d0_i2c1: i2c@50960000 {
+			compatible = "snps,designware-i2c";
+			clock-frequency = <100000>;
+			clocks = <&d0_clock EIC7700_CLK_LSP_I2C1_PCLK>;
+			clock-names = "pclk";
+			resets = <&d0_reset I2C_RST_CTRL SW_I2C_RST_N_1>;
+			reset-names = "rst";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <0x0 0x50960000 0x0 0x10000>;
+			interrupts = <106>;
+			interrupt-parent = <&plic>;
+		};
+		d0_i2c2: i2c@50970000 {
+				compatible = "snps,designware-i2c";
+				clock-frequency = <100000>;
+				clocks = <&d0_clock EIC7700_CLK_LSP_I2C2_PCLK>;
+				clock-names = "pclk";
+				resets = <&d0_reset I2C_RST_CTRL SW_I2C_RST_N_2>;
+				reset-names = "rst";
+				#address-cells = <1>;
+				#size-cells = <0>;
+				reg = <0x0 0x50970000 0x0 0x8000>;
+				interrupts = <107>;
+				interrupt-parent = <&plic>;
+		};
+		d0_i2c3: i2c@50980000 {
+				compatible = "snps,designware-i2c";
+				clock-frequency = <100000>;
+				clocks = <&d0_clock EIC7700_CLK_LSP_I2C3_PCLK>;
+				clock-names = "pclk";
+				resets = <&d0_reset I2C_RST_CTRL SW_I2C_RST_N_3>;
+				reset-names = "rst";
+				#address-cells = <1>;
+				#size-cells = <0>;
+				reg = <0x0 0x50980000 0x0 0x8000>;
+				interrupts = <108>;
+				interrupt-parent = <&plic>;
+		};
+		d0_i2c4: i2c@50990000 {
+				compatible = "snps,designware-i2c";
+				clock-frequency = <100000>;
+				clocks = <&d0_clock EIC7700_CLK_LSP_I2C4_PCLK>;
+				clock-names = "pclk";
+				resets = <&d0_reset I2C_RST_CTRL SW_I2C_RST_N_4>;
+				reset-names = "rst";
+				#address-cells = <1>;
+				#size-cells = <0>;
+				reg = <0x0 0x50990000 0x0 0x8000>;
+				interrupts = <109>;
+				interrupt-parent = <&plic>;
+		};
+		d0_i2c5: i2c@509a0000 {
+				compatible = "snps,designware-i2c";
+				clock-frequency = <100000>;
+				clocks = <&d0_clock EIC7700_CLK_LSP_I2C5_PCLK>;
+				clock-names = "pclk";
+				resets = <&d0_reset I2C_RST_CTRL SW_I2C_RST_N_5>;
+				reset-names = "rst";
+				#address-cells = <1>;
+				#size-cells = <0>;
+				reg = <0x0 0x509a0000 0x0 0x8000>;
+				interrupts = <110>;
+				interrupt-parent = <&plic>;
+		};
+		d0_i2c6: i2c@509b0000 {
+				compatible = "snps,designware-i2c";
+				clock-frequency = <100000>;
+				clocks = <&d0_clock EIC7700_CLK_LSP_I2C6_PCLK>;
+				clock-names = "pclk";
+				resets = <&d0_reset I2C_RST_CTRL SW_I2C_RST_N_6>;
+				reset-names = "rst";
+				#address-cells = <1>;
+				#size-cells = <0>;
+				reg = <0x0 0x509b0000 0x0 0x8000>;
+				interrupts = <111>;
+				interrupt-parent = <&plic>;
+		};
+		d0_i2c7: i2c@509c0000 {
+				compatible = "snps,designware-i2c";
+				clock-frequency = <100000>;
+				clocks = <&d0_clock EIC7700_CLK_LSP_I2C7_PCLK>;
+				clock-names = "pclk";
+				resets = <&d0_reset I2C_RST_CTRL SW_I2C_RST_N_7>;
+				reset-names = "rst";
+				#address-cells = <1>;
+				#size-cells = <0>;
+				reg = <0x0 0x509c0000 0x0 0x8000>;
+				interrupts = <112>;
+				interrupt-parent = <&plic>;
+		};
+		d0_i2c8: i2c@509d0000 {
+				compatible = "snps,designware-i2c";
+				clock-frequency = <100000>;
+				clocks = <&d0_clock EIC7700_CLK_LSP_I2C8_PCLK>;
+				clock-names = "pclk";
+				resets = <&d0_reset I2C_RST_CTRL SW_I2C_RST_N_8>;
+				reset-names = "rst";
+				#address-cells = <1>;
+				#size-cells = <0>;
+				reg = <0x0 0x509d0000 0x0 0x8000>;
+				interrupts = <113>;
+				interrupt-parent = <&plic>;
+		};
+		d0_i2c9: i2c@509e0000 {
+				compatible = "snps,designware-i2c";
+				clock-frequency = <100000>;
+				clocks = <&d0_clock EIC7700_CLK_LSP_I2C9_PCLK>;
+				clock-names = "pclk";
+				resets = <&d0_reset I2C_RST_CTRL SW_I2C_RST_N_9>;
+				reset-names = "rst";
+				#address-cells = <1>;
+				#size-cells = <0>;
+				reg = <0x0 0x509e0000 0x0 0x8000>;
+				interrupts = <114>;
+				interrupt-parent = <&plic>;
 		};
 
 		gpio@51600000 {
