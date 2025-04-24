@@ -5,8 +5,16 @@
 
 /dts-v1/;
 
-#include "eic7700.dtsi"
+#define RTCCLK_FREQ		1000000
+#define LSPCLK_FREQ		200000000
 
+/* If wanna enable ECC capability of DDR, should reserve highest zone of 1/8 all space for it */
+#define MEMORY_SIZE_H		0x4
+#define MEMORY_SIZE_L		0x0
+#define CMA_SIZE		0x20000000
+#include "eic7700.dtsi"
+#include <dt-bindings/interrupt-controller/irq.h>
+#include <dt-bindings/gpio/gpio.h>
 / {
 	compatible = "sifive,hifive-premier-p550", "eswin,eic7700";
 	model = "SiFive HiFive Premier P550";
@@ -18,6 +26,29 @@
 	chosen {
 		stdout-path = "serial0:115200n8";
 	};
+
+	cpus {
+		timebase-frequency = <RTCCLK_FREQ>;
+	};
+
+	memory@80000000 {
+		device_type = "memory";
+		reg = <0x0 0x80000000 0x4 0x00000000>;
+	};
+
+	hfclk: hfclk {
+		#clock-cells = <0>;
+		compatible = "fixed-clock";
+		clock-frequency = <26000000>;
+		clock-output-names = "hfclk";
+	};
+
+	rtcclk: rtcclk {
+		#clock-cells = <0>;
+		compatible = "fixed-clock";
+		clock-frequency = <RTCCLK_FREQ>;
+		clock-output-names = "rtcclk";
+	};
 };
 
 &uart0 {
@@ -25,5 +56,13 @@
 };
 
 &uart2 {
+	status = "okay";
+};
+
+&d0_clock {
+	status = "okay";
+};
+
+&d0_reset {
 	status = "okay";
 };
