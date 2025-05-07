@@ -3,9 +3,9 @@
  * Copyright (c) 2024 Beijing ESWIN Computing Technology Co., Ltd.
  */
 
-/dts-v1/;
 #include <dt-bindings/reset/eswin,eic7700-reset.h>
 #include <dt-bindings/clock/eswin,eic7700-clock.h>
+#include <dt-bindings/riscv/physical-memory.h>
 
 / {
 	#address-cells = <2>;
@@ -338,6 +338,12 @@
 			};
 		};
 
+		d0_hsp_sp_csr: hsp_sp_top_csr@0x50440000 {
+			compatible = "syscon";
+			#size-cells = <2>;
+			reg = <0x0 0x50440000 0x0 0x2000>;
+		};
+
 		d0_i2c0: i2c@50950000 {
 			compatible = "snps,designware-i2c";
 			clock-frequency = <100000>;
@@ -469,7 +475,7 @@
 				interrupt-parent = <&plic>;
 		};
 
-		gpio@51600000 {
+		gpio0: gpio@51600000 {
 			compatible = "snps,dw-apb-gpio";
 			reg = <0x0 0x51600000 0x0 0x80>;
 			#address-cells = <1>;
@@ -513,6 +519,32 @@
 				gpio-controller;
 				ngpios = <16>;
 				#gpio-cells = <2>;
+			};
+		};
+
+		d0_gmac0: ethernet@50400000 {
+			compatible = "eswin,eic7700-qos-eth";
+			clocks = <&d0_clock EIC7700_CLK_HSP_ETH_APP_CLK>,
+				<&d0_clock EIC7700_CLK_HSP_ETH_CSR_CLK>,
+				<&d0_clock EIC7700_CLK_HSP_ETH0_CORE_CLK>;
+			clock-names = "app", "stmmaceth","tx";
+			eswin,hsp_sp_csr = <&d0_hsp_sp_csr 0x1030 0x100 0x108>;
+			eswin,syscrg_csr = <&d0_sys_crg 0x148 0x14c>;
+			id = <0>;
+			interrupts = <61>;
+			interrupt-names = "macirq";
+			interrupt-parent = <&plic>;
+			phy-mode = "rgmii";
+			reg = <0x0 0x50400000 0x0 0x10000>;
+			resets = <&d0_reset HSPDMA_RST_CTRL SW_HSP_ETH0_ARSTN>;
+			reset-names = "ethrst";
+			snps,axi-config = <&d0_stmmac_axi_setup>;
+			status = "disabled";
+			d0_stmmac_axi_setup: stmmac-axi-config {
+				snps,blen = <0 0 0 0 16 8 4>;
+				snps,rd_osr_lmt = <2>;
+				snps,wr_osr_lmt = <2>;
+				snps,lpi_en = <0>;
 			};
 		};
 	};
