@@ -12,7 +12,9 @@
 #define MEMORY_SIZE_H		0x4
 #define MEMORY_SIZE_L		0x0
 #define CMA_SIZE		0x20000000
+
 #include "eic7700.dtsi"
+#include "hifive-premier-p550-pinctrl.dtsi"
 #include <dt-bindings/interrupt-controller/irq.h>
 #include <dt-bindings/gpio/gpio.h>
 / {
@@ -21,6 +23,7 @@
 
 	aliases {
 		serial0 = &uart0;
+		ethernet0 = &d0_gmac0;
 	};
 
 	chosen {
@@ -49,6 +52,25 @@
 		clock-frequency = <RTCCLK_FREQ>;
 		clock-output-names = "rtcclk";
 	};
+
+	vcc_1v8: regulator-1v8 {
+		compatible = "regulator-fixed";
+		regulator-name = "1v8";
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+	};
+	
+	
+	vcc_3v3: regulator-3v3 {
+		compatible = "regulator-fixed";
+		regulator-name = "3v3";
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+	};
 };
 
 &uart0 {
@@ -64,5 +86,43 @@
 };
 
 &d0_reset {
+	status = "okay";
+};
+
+&d0_gmac0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&gpio106_pins>;
+	rst-gpios = <&gpioD 10 GPIO_ACTIVE_LOW>;
+	eswin,rgmiisel = <&pinctrl 0x290 0x3>;
+	eswin,led-cfgs = <0x6100 0xa40 0x420>;
+};
+
+&pinctrl {
+	status = "okay";
+	vrgmii-supply = <&vcc_1v8>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&gpio6_pins &gpio7_pins
+		&gpio8_pins &gpio9_pins
+		&gpio10_pins &gpio17_pins
+		&gpio35_pins &gpio36_pins
+		&gpio37_pins &gpio38_pins
+		&gpio39_pins &gpio40_pins
+		&gpio41_pins &gpio52_pins
+		&gpio53_pins &gpio64_pins
+		&gpio65_pins &gpio66_pins
+		&gpio67_pins &gpio70_pins
+		&gpio73_pins &gpio83_pins
+		&gpio86_pins &gpio87_pins
+		&gpio92_pins &gpio93_pins>;
+
+    /* pin header default function for GPIO
+       SPI1 (CS0,SCLK,MOSI,MISO,D2,D3): GPIO 35,36,37,38,39,40
+       I2C1 (SCL,SDA): GPIO 46,47
+       UART3(TX,RX): GPIO 92,93
+    */
+};
+
+&gpio0 {
 	status = "okay";
 };

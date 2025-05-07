@@ -1,0 +1,367 @@
+#include "eic7700.dtsi"
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+    #address-cells = <2>;
+    #size-cells = <2>;
+    soc {
+        pinctrl: pinctrl@0x51600080 {
+			compatible = "eswin,eic7700-pinctrl", "syscon";
+			reg = <0x0 0x51600080 0x0 0x1fff80>;
+			status = "okay";
+
+			// P550
+			emmc_led_ctrl_pins: emmc_led_ctrl-pins {
+				mux {
+					pins = "gpio29";
+					function = "emmc";
+					input-disable;
+					bias-pull-down;
+				};
+			};
+
+			gpio15_pins: gpio15-pins {
+				mux {
+					pins = "mode_set2";
+					function = "gpio";
+				};
+			};
+
+			gpio79_pins: gpio79-pins {
+				mux {
+					pins = "mipi_csi3_xvs";
+					function = "gpio";
+				};
+			};
+
+			gpio106_pins: gpio106-pins {
+				mux {
+					pins = "gpio106";
+					function = "gpio";
+					input-disable;
+					bias-pull-down;
+				};
+			};
+
+			gpio111_pins: gpio111-pins {
+				mux {
+					pins = "gpio111";
+					function = "gpio";
+					input-disable;
+					bias-pull-up;
+				};
+			};
+
+			sata_act_led_pins: sata_act_led-pins {
+				mux {
+					pins = "gpio27";
+					function = "sata";
+					input-disable;
+					bias-pull-down;
+				};
+			};
+
+			gpio43_pins: gpio43-pins {
+				mux {
+					pins = "usb1_pwren";
+					function = "gpio";
+				};
+			};
+
+			gpio0_pins: gpio0-pins {
+				mux {
+					pins = "gpio0";
+					function = "gpio";
+					input-enable;
+					bias-pull-up;
+				};
+			};
+
+			gpio28_pins: gpio28-pins {
+				mux {
+					pins = "gpio28";
+					function = "gpio";
+					input-enable;
+					bias-pull-up;
+				};
+			};
+
+			gpio5_pins: gpio5-pins {
+				mux {
+					pins = "gpio5";
+					function = "gpio";
+					input-enable;
+					bias-pull-up;
+				};
+			};
+
+			gpio6_pins: gpio6-pins {
+				mux {
+					pins = "spi2_cs0_n";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio7_pins: gpio7-pins {
+				mux {
+					pins = "jtag1_tck";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio8_pins: gpio8-pins {
+				mux {
+					pins = "jtag1_tms";
+					function = "gpio";
+					input-enable;
+					bias-pull-up;
+				};
+			};
+
+			gpio9_pins: gpio9-pins {
+				mux {
+					pins = "jtag1_tdi";
+					function = "gpio";
+					input-enable;
+					bias-pull-up;
+				};
+			};
+
+			gpio10_pins: gpio10-pins {
+				mux {
+					pins = "jtag1_tdo";
+					function = "gpio";
+					input-enable;
+					bias-pull-up;
+				};
+			};
+
+			gpio17_pins: gpio17-pins {
+				mux {
+					pins = "jtag2_trst";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio35_pins: gpio35-pins {
+				mux {
+					pins = "spi1_cs0_n";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio36_pins: gpio36-pins {
+				mux {
+					pins = "spi1_clk";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio37_pins: gpio37-pins {
+				mux {
+					pins = "spi1_d0";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio38_pins: gpio38-pins {
+				mux {
+					pins = "spi1_d1";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio39_pins: gpio39-pins {
+				mux {
+					pins = "spi1_d2";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio40_pins: gpio40-pins {
+				mux {
+					pins = "spi1_d3";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio41_pins: gpio41-pins {
+				mux {
+					pins = "spi1_cs1_n";
+					function = "gpio";
+				};
+			};
+
+			gpio46_pins: gpio46-pins {
+				mux {
+					pins = "i2c1_scl";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio52_pins: gpio52-pins {
+				mux {
+					pins = "i2c4_scl";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio53_pins: gpio53-pins {
+				mux {
+					pins = "i2c4_sda";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio64_pins: gpio64-pins {
+				mux {
+					pins = "jtag2_tck";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio65_pins: gpio65-pins {
+				mux {
+					pins = "jtag2_tms";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio66_pins: gpio66-pins {
+				mux {
+					pins = "jtag2_tdi";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio67_pins: gpio67-pins {
+				mux {
+					pins = "jtag2_tdo";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio70_pins: gpio70-pins {
+				mux {
+					pins = "mipi_csi0_xvs";
+					function = "gpio";
+				};
+			};
+
+			gpio73_pins: gpio73-pins {
+				mux {
+					pins = "mipi_csi1_xvs";
+					function = "gpio";
+				};
+			};
+
+			gpio83_pins: gpio83-pins {
+				mux {
+					pins = "mipi_csi4_xhs";
+					function = "gpio";
+				};
+			};
+
+			gpio86_pins: gpio86-pins {
+				mux {
+					pins = "mipi_csi5_xhs";
+					function = "gpio";
+				};
+			};
+
+			gpio87_pins: gpio87-pins {
+				mux {
+					pins = "mipi_csi5_mclk";
+					function = "gpio";
+				};
+			};
+
+			gpio92_pins: gpio92-pins {
+				mux {
+					pins = "gpio92";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio93_pins: gpio93-pins {
+				mux {
+					pins = "gpio93";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio94_pins: gpio94-pins {
+				mux {
+					pins = "s_mode";
+					function = "gpio";
+					input-enable;
+					bias-pull-down;
+				};
+			};
+
+			gpio82_pins: gpio82-pins {
+				mux {
+					pins = "mipi_csi4_xvs";
+					function = "gpio";
+				};
+			};
+
+			gpio85_pins: gpio85-pins {
+				mux {
+					pins = "mipi_csi5_xvs";
+					function = "gpio";
+				};
+			};
+
+			fan_tach_pins: fan_tach-pins {
+				mux {
+					pins = "fan_tach";
+					function = "fan_tach";
+				};
+			};
+
+			fan_pwm_pins: fan_pwm-pins {
+				mux {
+					pins = "fan_pwm";
+					function = "pwm";
+				};
+			};
+		};
+    };
+};
