@@ -547,5 +547,31 @@
 				snps,lpi_en = <0>;
 			};
 		};
+
+		sdhci_emmc: mmc@50450000 {
+			compatible = "eswin,emmc-sdhci-5.1";
+			#clock-cells = <0>;
+			clocks = <&d0_clock EIC7700_CLK_HSP_MSHC0_CORE_CLK>, <&d0_clock EIC7700_CLK_HSP_CFG_CLK>;
+			clock-names = "clk_xin", "clk_ahb";
+			clock-output-names = "emmc_cardclock";
+			assigned-clocks = <&d0_clock EIC7700_CLK_HSP_MSHC0_CORE_CLK>;
+			assigned-clock-rates = <200000000>;
+			reg = <0x0 0x50450000 0x0 0x10000>;
+			interrupt-parent = <&plic>;
+			interrupts = <79>;
+			resets = <&d0_reset HSPDMA_RST_CTRL SW_MSHC0_TXRX_RSTN>,
+				<&d0_reset HSPDMA_RST_CTRL SW_MSHC0_PHY_RSTN>,
+				<&d0_reset HSPDMA_RST_CTRL SW_HSP_EMMC_PRSTN>,
+				<&d0_reset HSPDMA_RST_CTRL SW_HSP_EMMC_ARSTN>;
+			reset-names = "txrx_rst", "phy_rst", "prstn", "arstn";
+			disable-cqe-dcmd;
+			bus-width = <8>;
+			non-removable;
+			mmc-hs400-1_8v;
+			max-frequency = <200000000>;
+			#size-cells = <2>;
+			eswin,hsp_sp_csr = <&d0_hsp_sp_csr 0x1038>;
+			status = "disabled";
+		};
 	};
 };
