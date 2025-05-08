@@ -98,6 +98,17 @@
 	eswin,led-cfgs = <0x6100 0xa40 0x420>;
 };
 
+&sdhci_emmc {
+	/* emmc */
+	status = "okay";
+	delay_code = <0x17>;
+	drive-impedance-ohm = <50>;
+	enable-cmd-pullup;
+	enable-data-pullup;
+	pinctrl-names = "default";
+	pinctrl-0 = <&emmc_led_ctrl_pins>;
+};
+
 &pinctrl {
 	status = "okay";
 	vrgmii-supply = <&vcc_1v8>;
