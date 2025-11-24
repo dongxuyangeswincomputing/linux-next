@@ -22,6 +22,11 @@
 		stdout-path = "serial0:115200n8";
 	};
 
+	memory@80000000 {
+		device_type = "memory";
+		reg = <0x0 0x80000000 0x4 0x00000000>;
+	};
+
 	vcc_1v8: vcc1v8 {
 		compatible = "regulator-fixed";
 		regulator-name = "vcc1v8";
@@ -31,12 +36,12 @@
 		regulator-max-microvolt = <1800000>;
 	};
 
-	  xtal24m: oscillator {
-        compatible = "fixed-clock";
-        clock-frequency = <24000000>;
-        #clock-cells = <0>;
-        clock-output-names = "xtal24m";
-    };
+	xtal24m: oscillator {
+		compatible = "fixed-clock";
+		clock-frequency = <24000000>;
+		#clock-cells = <0>;
+		clock-output-names = "xtal24m";
+	};
 };
 
 &pinctrl {
@@ -181,6 +186,10 @@
 };
 
 &reset {
+	status = "okay";
+};
+
+&gmac0 {
 	status = "okay";
 };
 

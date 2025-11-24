@@ -383,6 +383,48 @@
 			status = "disabled";
 		};
 
+		gmac0: ethernet@50400000 {
+			compatible = "eswin,eic7700-qos-eth", "snps,dwmac-5.20";
+			reg = <0x0 0x50400000 0x0 0x10000>;
+			clocks = <&clk 186>,
+				<&clk 171>,
+				<&clk 40>,
+				<&clk 193>;
+			clock-names = "axi", "cfg", "stmmaceth", "tx";
+			interrupt-parent = <&plic>;
+			interrupts = <61>;
+			interrupt-names = "macirq";
+			phy-mode = "rgmii-id";
+			phy-handle = <&phy0>;
+			resets = <&reset 95>;
+			reset-names = "stmmaceth";
+			rx-internal-delay-ps = <200>;
+			tx-internal-delay-ps = <900>;
+			eswin,hsp-sp-csr = <&hsp_sp_csr 0x100 0x108 0x118>;
+			dma-noncoherent;
+			snps,axi-config = <&stmmac_axi_setup>;
+			snps,aal;
+			snps,fixed-burst;
+			snps,tso;
+			stmmac_axi_setup: stmmac-axi-config {
+				snps,blen = <0 0 0 0 16 8 4>;
+				snps,rd_osr_lmt = <2>;
+				snps,wr_osr_lmt = <2>;
+			};
+			mdio {
+				compatible = "snps,dwmac-mdio";
+				status = "okay";
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				phy0: ethernet-phy@0 {
+					device_type = "ethernet-phy";
+					reg = <0>;
+					compatible = "ethernet-phy-id001c.c916", "realtek,rtl8211f";
+				};
+			};
+		};
+
 		sdhci_emmc: mmc@50450000 {
 			compatible = "eswin,eic7700-dwcmshc";
 			reg = <0x0 0x50450000 0x0 0x10000>;
