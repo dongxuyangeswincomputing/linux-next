@@ -16,6 +16,7 @@
 		serial0 = &uart0;
 		mmc0 = &sdhci_emmc;
 		mmc1 = &sdio0;
+		ethernet0 = &gmac0;
 	};
 
 	chosen {
