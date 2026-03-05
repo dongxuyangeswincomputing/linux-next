@@ -23,6 +23,20 @@
 		stdout-path = "serial0:115200n8";
 	};
 
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+		linux,cma {
+			compatible = "shared-dma-pool";
+			reusable;
+			size = <0x0 0x20000000>;
+			alignment = <0x0 0x1000>;
+			linux,cma-default;
+		};
+	};
+
 	vcc_1v8: vcc1v8 {
 		 compatible = "regulator-fixed";
 		 regulator-name = "vcc1v8";
