@@ -13,6 +13,9 @@
 	model = "SiFive HiFive Premier P550";
 
 	aliases {
+		mmc0 = &sdhci_emmc;
+		mmc1 = &sdio0;
+		mmc2 = &sdio1;
 		serial0 = &uart0;
 	};
 
@@ -132,6 +135,27 @@
 
 &pinctrl {
 	vrgmii-supply = <&vcc_1v8>;
+};
+
+&sdhci_emmc {
+	eswin,drive-impedance-ohms = <50>;
+	mmc-hs400-1_8v;
+	no-sd;
+	no-sdio;
+	non-removable;
+};
+
+&sdio0 {
+	eswin,drive-impedance-ohms = <33>;
+	no-mmc;
+	no-sdio;
+};
+
+&sdio1 {
+	eswin,drive-impedance-ohms = <33>;
+	no-mmc;
+	no-sd;
+	non-removable;
 };
 
 &uart0 {
