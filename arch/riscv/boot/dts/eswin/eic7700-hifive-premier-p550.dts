@@ -149,6 +149,7 @@
 
 
 &aon_i2c0 {
+	status = "okay";
 	eeprom@50 {
 		compatible = "atmel,24c02";
 		reg = <0x50>;
@@ -156,6 +157,7 @@
 };
 
 &aon_i2c1 {
+	status = "okay";
 	pac1934@10 {
 		compatible = "microchip,pac1934";
 		reg = <0x10>;
@@ -196,6 +198,10 @@
 	};
 };
 
+&pcie {
+	status = "okay";
+};
+
 &pinctrl {
 	vrgmii-supply = <&vcc_1v8>;
 };
@@ -206,12 +212,14 @@
 	no-sd;
 	no-sdio;
 	non-removable;
+	status = "okay";
 };
 
 &sdio0 {
 	eswin,drive-impedance-ohms = <33>;
 	no-mmc;
 	no-sdio;
+	status = "okay";
 };
 
 &sdio1 {
@@ -219,6 +227,7 @@
 	no-mmc;
 	no-sd;
 	non-removable;
+	status = "okay";
 };
 
 &uart0 {
@@ -228,3 +237,20 @@
 &uart2 {
 	status = "okay";
 };
+
+&wdt0 {
+	status = "okay";
+};
+
+&wdt1 {
+	status = "okay";
+};
+
+&wdt2 {
+	status = "okay";
+};
+
+&wdt3 {
+	status = "okay";
+};
+
