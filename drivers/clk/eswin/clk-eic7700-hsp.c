@@ -176,21 +176,21 @@ static struct eswin_fixed_factor_clock eic7700_hsp_factor_clks[] = {
 
 static struct eswin_gate_clock eic7700_hsp_gate_clks[] = {
 	ESWIN_GATE(EIC7700_HSP_CLK_GATE_SATA, "gate_clk_hsp_sata", hsp_usb_sata,
-		   CLK_SET_RATE_PARENT, EIC7700_HSP_SATA_REG, 28, 0),
+		   CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED, EIC7700_HSP_SATA_REG, 28, 0),
 	ESWIN_GATE(EIC7700_HSP_CLK_GATE_MSHC0_TMR, "gate_clk_hsp_mshc0_tmr",
-		   hsp_mmc, CLK_SET_RATE_PARENT, EIC7700_HSP_MSHC0_REG, 8, 0),
+		   hsp_mmc, CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED, EIC7700_HSP_MSHC0_REG, 8, 0),
 	ESWIN_GATE(EIC7700_HSP_CLK_GATE_MSHC1_TMR, "gate_clk_hsp_mshc1_tmr",
-		   hsp_mmc, CLK_SET_RATE_PARENT, EIC7700_HSP_MSHC1_REG, 8, 0),
+		   hsp_mmc, CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED, EIC7700_HSP_MSHC1_REG, 8, 0),
 	ESWIN_GATE(EIC7700_HSP_CLK_GATE_MSHC2_TMR, "gate_clk_hsp_mshc2_tmr",
-		   hsp_mmc, CLK_SET_RATE_PARENT, EIC7700_HSP_MSHC2_REG, 8, 0),
+		   hsp_mmc, CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED, EIC7700_HSP_MSHC2_REG, 8, 0),
 };
 
 static struct eic7700_hsp_clk_gate eic7700_hsp_spec_gate_clks[] = {
 	EIC7700_HSP_GATE(EIC7700_HSP_CLK_GATE_USB0, "gate_clk_hsp_usb0",
-			 hsp_usb_sata, CLK_SET_RATE_PARENT,
+			 hsp_usb_sata, CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED,
 			 EIC7700_HSP_USB0_REG, 28, EIC7700_HSP_USB0_REF_REG),
 	EIC7700_HSP_GATE(EIC7700_HSP_CLK_GATE_USB1, "gate_clk_hsp_usb1",
-			 hsp_usb_sata, CLK_SET_RATE_PARENT,
+			 hsp_usb_sata, CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED,
 			 EIC7700_HSP_USB1_REG, 28, EIC7700_HSP_USB1_REF_REG),
 };
 
