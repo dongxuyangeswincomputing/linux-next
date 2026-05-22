@@ -6,6 +6,7 @@
 /dts-v1/;
 #include <dt-bindings/clock/eswin,eic7700-clock.h>
 #include <dt-bindings/clock/eswin,eic7700-hspcrg.h>
+#include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/reset/eswin,eic7700-hspcrg.h>
 #include <dt-bindings/reset/eswin,eic7700-reset.h>
 #include <dt-bindings/riscv/physical-memory.h>
@@ -264,6 +265,38 @@
 			clocks = <&clk EIC7700_CLK_GATE_HSP_CFG_CLK>;
 			#address-cells = <2>;
 			#size-cells = <2>;
+
+			gmac0: ethernet@50400000 {
+				compatible = "eswin,eic7700-qos-eth", "snps,dwmac-5.20";
+				reg = <0x0 0x50400000 0x0 0x10000>;
+				interrupts = <61>;
+				interrupt-names = "macirq";
+				clocks = <&clk EIC7700_CLK_GATE_HSP_ACLK>,
+					 <&clk EIC7700_CLK_GATE_HSP_CFG_CLK>,
+					 <&clk EIC7700_CLK_MUX_SYSCFG_CLK_ROOT_2MUX1_GFREE>,
+					 <&clk EIC7700_CLK_GATE_HSP_ETH0_CORE_CLK>;
+				clock-names = "axi", "cfg", "stmmaceth", "tx";
+				resets = <&reset EIC7700_RESET_HSP_ETH0_ARST>;
+				reset-names = "stmmaceth";
+				eswin,hsp-sp-csr = <&hsp_sp_csr 0x100 0x108 0x118 0x114 0x11c>;
+				snps,aal;
+				snps,fixed-burst;
+				snps,tso;
+				snps,axi-config = <&stmmac_axi_setup_gmac0>;
+				status = "disabled";
+
+				gmac0_mdio: mdio {
+					compatible = "snps,dwmac-mdio";
+					#address-cells = <1>;
+					#size-cells = <0>;
+				};
+
+				stmmac_axi_setup_gmac0: stmmac-axi-config {
+					snps,blen = <0 0 0 0 16 8 4>;
+					snps,rd_osr_lmt = <2>;
+					snps,wr_osr_lmt = <2>;
+				};
+			};
 
 			sata: sata@50420000 {
 				compatible = "eswin,eic7700-ahci", "snps,dwc-ahci";
