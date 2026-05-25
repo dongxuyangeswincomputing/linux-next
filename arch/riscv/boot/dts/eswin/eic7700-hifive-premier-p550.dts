@@ -13,6 +13,7 @@
 	model = "SiFive HiFive Premier P550";
 
 	aliases {
+		ethernet0 = &gmac0;
 		mmc0 = &sdhci_emmc;
 		mmc1 = &sdio0;
 		mmc2 = &sdio1;
@@ -198,12 +199,36 @@
 	};
 };
 
+&gmac0 {
+	phy-handle = <&gmac0_phy0>;
+	phy-mode = "rgmii-id";
+	pinctrl-names = "default";
+	pinctrl-0 = <&gpio106_pins>;
+	rx-internal-delay-ps = <20>;
+	tx-internal-delay-ps = <100>;
+	status = "okay";
+};
+
+&gmac0_mdio {
+	gmac0_phy0: ethernet-phy@0 {
+		compatible = "ethernet-phy-id001c.c916";
+		reg = <0>;
+		reset-gpios = <&gpioD 10 GPIO_ACTIVE_LOW>;
+		reset-assert-us = <10000>;
+		reset-deassert-us = <80000>;
+	};
+};
+
 &pcie {
 	status = "okay";
 };
 
 &pinctrl {
 	vrgmii-supply = <&vcc_1v8>;
+};
+
+&sata {
+	status = "okay";
 };
 
 &sdhci_emmc {
@@ -235,6 +260,26 @@
 };
 
 &uart2 {
+	status = "okay";
+};
+
+&usb0 {
+	wakeup-source;
+	snps,dis_enblslpm_quirk;
+	snps,dis-u2-freeclk-exists-quirk;
+	snps,dis_u2_susphy_quirk;
+	snps,dis-del-phy-power-chg-quirk;
+	snps,parkmode-disable-ss-quirk;
+	status = "okay";
+};
+
+&usb1 {
+	wakeup-source;
+	snps,dis_enblslpm_quirk;
+	snps,dis-u2-freeclk-exists-quirk;
+	snps,dis_u2_susphy_quirk;
+	snps,dis-del-phy-power-chg-quirk;
+	snps,parkmode-disable-ss-quirk;
 	status = "okay";
 };
 
